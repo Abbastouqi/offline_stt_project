@@ -18,39 +18,41 @@ class TestModelLoader(unittest.TestCase):
             config = json.load(f)
 
         loader = ModelLoader()
-        
-        # Sahi method name 'loadModel' use karein
         result = loader.loadModel(config) 
-
-        # Kyunke aapka code True return karta hai
         self.assertTrue(result, "Model load nahi ho saka!")
 
     def test_transcription(self):
-        # Audio test (Urdu + English)
-        audio_path = os.path.join("unit_testing", "member_1_model_tests", "benchmark_audio", "sample_ur_01.wav")
-        
-        if not os.path.exists(audio_path):
-            self.fail("Audio file nahi mili!")
-
         loader = ModelLoader()
         # Pehle model load karein
         loader.loadModel({"model_name": "base", "language": "ur"})
-        
-        # Whisper direct file bhi leta hai, 
-        # lekin aapka 'recognize' chunk leta hai. 
-        # Direct test ke liye hum whisper use kar lete hain:
-        import whisper
-        model = loader.model # Loader ke andar se model nikalein
-        
-        print("\n--- Urdu Result ---")
-        res_ur = model.transcribe(audio_path)
-        print(res_ur["text"])
-        
-        print("\n--- English Result ---")
-        res_en = model.transcribe(audio_path, task="translate")
-        print(res_en["text"])
+        model = loader.model 
 
-        self.assertIsNotNone(res_ur["text"])
+        # --- Dono Files ki List ---
+        audio_files = ["sample_ur_01.wav", "sample_ur_02.wav"]
+        base_path = os.path.join("unit_testing", "member_1_model_tests", "benchmark_audio")
+
+        for file_name in audio_files:
+            audio_path = os.path.join(base_path, file_name)
+            
+            if not os.path.exists(audio_path):
+                print(f"\n[!] Error: {file_name} nahi mili!")
+                continue
+
+            print(f"\n======================================")
+            print(f" TESTING FILE: {file_name} ")
+            print(f"======================================")
+
+            # Urdu Transcription
+            print("\n--- Urdu Result ---")
+            res_ur = model.transcribe(audio_path)
+            print(res_ur["text"])
+            
+            # English Translation
+            print("\n--- English Translation ---")
+            res_en = model.transcribe(audio_path, task="translate")
+            print(res_en["text"])
+
+            self.assertIsNotNone(res_ur["text"])
 
 if __name__ == "__main__":
     unittest.main()

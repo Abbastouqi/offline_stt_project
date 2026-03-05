@@ -1,7 +1,7 @@
-ffmpeg.exe
-ffplay.exe
-ffprobe.exe
-env/
-__pycache__/
-*.xz
-*.zip
+# ffmpeg.exe
+# ffplay.exe
+# ffprobe.exe
+# env/
+# __pycache__/
+# *.xz
+# *.zip

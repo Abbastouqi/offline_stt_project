@@ -1,2 +1,4 @@
-vosk
+openai-whisper
+torch
+numpy
 pytest
